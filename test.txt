@@ -1,0 +1,56 @@
+Background:
+The ShipmentUpdateListenerInterface will get updates passed to it (from some external system, REST interface, Queue system or something similar). It has to update the ShipmentSearchIndex with the new data of the shipment. (In the implementation below it is abstracted away.) The code above should be not modified.
+Restrictions:
+Ensure that whenever receiveUpdate is called, as a consequence updateShipment of the ShipmentSearchIndex is also called once, with the corresponding data and id passed to it.
+Also make sure that the executions of updateShipment with the same id never run concurrently (execution always in order and consecutive). Assume all the code is running in one NodeJS process (or browser window/tab)..
+
+Hint: Think about scalable and maintainable ways to implement the restrictions. You can implement additional classes/interfaces/functions if you need to structure functionality further.
+
+async function sleep(ms: number) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => resolve(), ms)
+  })
+}
+
+async function randomDelay() {
+  const randomTime = Math.round(Math.random() * 1000)
+  return sleep(randomTime)
+}
+
+class ShipmentSearchIndex {
+  async updateShipment(id: string, shipmentData: any) {
+    const startTime = new Date()
+    await randomDelay()
+    const endTime = new Date()
+    console.log(`update ${id}@${
+        startTime.toISOString()
+      } finished@${
+        endTime.toISOString()
+      }`
+    )
+    
+    return {startTime, endTime}
+  }
+}
+
+// Implementation needed
+interface ShipmentUpdateListenerInterface {
+  receiveUpdate(id: string, shipmentData: any) 
+}
+//I create a new class ShipmentUpdate implement interface ShipmentUpdateListenerInterface
+class ShipmentUpdate implements ShipmentUpdateListenerInterface {
+//Concrete implementation of method  receiveUpdate(id: string, shipmentData: any) 
+receiveUpdate(id: string, shipmentData: any) 
+{
+//create object and object will call function
+const ShipmentSearchIndexObj = new ShipmentSearchIndex(id: string, shipmentData: any);
+ShipmentSearchIndexObj.updateShipment(id: string, shipmentData: any)
+}
+}
+//main Function for calling receiveUpdate()
+function Main()
+{
+//Create object of class ShipmentUpdate
+const ShipmentUpdateObj = new ShipmentUpdate()
+//call receive update method of class ShipmentUpdate
+ShipmentUpdateObj.receiveUpdate('123', '2018-12-20)// date format 'yyyy-mm-dd'
